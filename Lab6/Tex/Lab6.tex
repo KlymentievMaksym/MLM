@@ -1,0 +1,128 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\usepackage[ukrainian]{babel}
+
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{url}
+
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\usepackage{csquotes}
+\newcommand{\setfontsize}[1]{\fontsize{#1pt}{#1pt}\selectfont}
+\addbibresource{references.bib}
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\hypersetup{colorlinks=true, linkcolor=[RGB]{255, 3, 209}, citecolor={black}}
+
+\tolerance=1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+\begin{document}
+    \pagestyle{plain}
+    \setfontsize{14}
+
+    \begin{titlepage}
+        \begin{center}
+
+        Міністерство освіти і науки України
+        
+        НТУУ «Київський політехнічний інститут»
+        
+        Фізико-технічний інститут
+        \vspace{3.3cm}
+        
+        {\textbf{Машинне навчання}\\Лабораторна робота No6\\Отримання навичок використання існуючого програмного коду}
+
+        \vspace{8.5cm}
+
+        \begin{flushright}
+            \textbf{Виконав:}\\Студент 4-го курсу\\групи ФІ-21\\Климентьєв Максим\\
+            \textbf{Перевірив:}\\\text{\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
+        \end{flushright}
+
+        \end{center}
+    \end{titlepage}
+    \newpage
+
+    \pagenumbering{gobble}
+    \tableofcontents
+    \cleardoublepage
+    \pagenumbering{arabic}
+    \setcounter{page}{3}
+
+    \newpage
+    \section{Мета роботи}
+        Отримати навички використання існуючого програмного коду.
+
+    \newpage
+    \section{Огляд обраної статті}
+        Була обрана стаття, яку я аналізував в своєму аналізі літератури для дипломної роботи \textit{Colorful Image Colorization} \cite{2016-colorful-image-colorization}.\\
+        \textbf{Назва:} Colorful Image Colorization 2016\\
+        \textbf{Автори:} Richard Zhang, Phillip Isola, Alexei A. Efros.\\
+        \textbf{Посилання на статтю:} \url{https://arxiv.org/abs/1603.08511}\\
+        \textbf{Посилання на код:} \url{https://github.com/richzhang/colorization}
+
+        \subsection{Опис проблеми}
+            Традиційні методи колоризації часто використовували функцію втрат L2. Оскільки для одного сірого об'єкта може існувати багато варіантів кольору (наприклад, яблуко може бути червоним, зеленим або жовтим), модель, що навчається на L2, намагається усереднити ці варіанти. Це призводить до ненасичених, сіруватих результатів.
+
+        \subsection{Запропонований алгоритм та новизна}
+            Автори пропонують підхід, що розглядає колоризацію не як задачу регресії, а як задачу \textbf{класифікації}.
+            \begin{itemize}
+                \item \textbf{Квантування кольору:} Простір кольорів Lab квантується на 313 дискретних класів.
+                \item \textbf{Class Rebalancing:} Оскільки кольори в природі розподілені нерівномірно (багато сірого/неба, мало яскравого), автори вводять вагові коефіцієнти для рідкісних класів. Це змушує мережу генерувати більш яскраві та різноманітні кольори.
+                \item \textbf{Архітектура:} Використовується Convolutional Neural Network типу VGG, яка передбачає розподіл ймовірностей кольорів для кожного пікселя.
+            \end{itemize}
+
+    \newpage
+    \section{Демонстрація роботи}
+        Код було запущено у хмарному середовищі Google Colab з використанням офіційного репозиторію авторів. Було завантажено попередньо навчені ваги.
+
+        % \begin{figure}[h!]
+        %     \centering
+        %     % Переконайся, що файл result.png лежить поруч із .tex файлом!
+        %     \includegraphics[width=0.9\textwidth]{../images/result.png} 
+        %     \caption{Результат роботи алгоритму: зліва --- вхідне ч/б зображення, справа --- результат автоматичної колоризації.}
+        %     \label{fig:result}
+        % \end{figure}
+
+        % На рис. \ref{fig:result} видно, що модель успішно відновила кольори, правильно ідентифікувавши небо (синє), траву (зелена) та об'єкт на передньому плані.
+
+    \newpage
+    \section{Шляхи покращення}
+        Незважаючи на гарні результати, метод іноді допускає помилки. Базуючись на сучасних дослідженнях, пропонуються такі шляхи покращення:
+
+        \begin{enumerate}
+            \item \textbf{Використання GAN:} 
+            Застосування підходу \textit{Pix2Pix}\cite{2017-image-to-image-translation-official} або \textit{CycleGAN}\cite{2017-unpaired-image-to-image-translation-official} дозволило б покращити текстурну відповідність та різкість зображення завдяки дискримінатору.
+            
+            \item \textbf{Diffusion Models:}
+            Сучасні методи, такі як \textit{Palette}\cite{2022-palette-image-to-image-diffusion-models-official} або \textit{Control Color}\cite{2025-control-color}, використовують дифузійні моделі. Вони дозволяють генерувати більш фотореалістичні зображення та краще розуміють глобальний контекст сцени.
+            
+            \item \textbf{Multimodal Colorization:}
+            Інтеграція текстових описів дозволила б користувачеві керувати процесом, наприклад, вказати системі: ''зроби машину червоною''.
+        \end{enumerate}
+
+    \newpage
+    \section{Висновок}
+        У ході лабораторної роботи було досліджено метод \textit{Colorful Image Colorization}. Встановлено, що перехід від регресії до класифікації кольорів значно покращує візуальне сприйняття результату.
+
+    \newpage
+    \defbibenvironment{bibliography}
+    {\list
+        {\printfield[labelnumberwidth]{labelnumber}}
+        {\setfontsize{14}%
+        }}
+    {\endlist}
+    {\item}
+
+    \printbibliography[heading=bibintoc,title={Перелік посилань}]
+
+\end{document}

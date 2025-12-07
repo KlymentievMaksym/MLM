@@ -2,3 +2,8 @@
 .env
 /Lab1/.*
 /Lab2/.*
+!/Lab6/Tex/
+/Lab6/Tex/*
+!/Lab6/Tex/Lab6.tex
+!/Lab6/Tex/Lab6.pdf
+!/Lab6/Tex/references.bib
